@@ -86,7 +86,7 @@ function updateSelectChapter() {
     for (let i = 1; i <= chapterCount; i++) {
       const option = document.createElement("option");
       option.value = i;
-      option.textContent = `Chapter: ${i}`;
+      option.textContent = `Chapter ${i}`;
       selectChapter.appendChild(option);
     }
   }
@@ -96,7 +96,7 @@ function getChapter(version, book, chapter) {
   fetch(`https://bible.helloao.org/api/${version}/${book}/${chapter}.json`)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
 
       bookTitle.innerHTML = data.book.name;
       chapterTitle.innerHTML = `Chapter ${data.chapter.number}`;
@@ -118,7 +118,15 @@ function getChapter(version, book, chapter) {
           .filter((item) => typeof item === "string")
           .map((item) => item.replace(/¶/g, "")); // Remove the ¶ symbol
 
-        verseElement.innerHTML = `<span>${verse.number}</span> ${filteredContent.join(" ")}`;
+        verseElement.innerHTML = `<span>${verse.number}</span> <div>${filteredContent.join(
+          " "
+        )}</div>`;
+
+        verseElement.addEventListener("click", function () {
+          const verseText = `${verse.number}: ${filteredContent.join(" ")}`;
+          copyVerseToClipboard(verseText);
+        });
+
         chapterText.appendChild(verseElement);
       });
     });
@@ -132,6 +140,38 @@ function handleInput() {
   const chapter = document.getElementById("select-chapter");
 
   getChapter(version.value, book.value, chapter.value);
+}
+
+function copyVerseToClipboard(text) {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      showToast("Verse copied to clipboard");
+    })
+    .catch((e) => {
+      console.error("Could not copy text: ", e);
+    });
+}
+
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerText = message;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
+function changeChapter() {
+  const prevButton = document.getElementById("prev-chapter");
+  const nextButton = document.getElementById("next-button");
+
+  prevButton.addEventListener("click", () => {
+    getChapter(_, _);
+  });
 }
 
 // function displayChapter(data) {
