@@ -92,6 +92,8 @@ function updateSelectChapter() {
   }
 }
 
+const selectedVerses = new Set(); // To track selected verses
+
 function getChapter(version, book, chapter) {
   fetch(`https://bible.helloao.org/api/${version}/${book}/${chapter}.json`)
     .then((res) => res.json())
@@ -122,10 +124,26 @@ function getChapter(version, book, chapter) {
           " "
         )}</div>`;
 
-        verseElement.addEventListener("click", function () {
-          const verseText = `${verse.number}: ${filteredContent.join(" ")}`;
-          copyVerseToClipboard(verseText);
-        });
+        const verseText = `${bookTitle.innerHTML} ${chapterTitle.innerHTML} ${verse.number}`;
+
+        // verseElement.addEventListener("click", function () {
+        //   const verseText = `${verse.number}: ${filteredContent.join(" ")}`;
+        //   copyVerseToClipboard(verseText);
+        // });
+
+        // Toggle underline on click
+
+        if (selectedVerses.has(verseText)) {
+          selectedVerses.delete(verseText);
+          verseElement.style.textDecoration = "none";
+        } else {
+          selectedVerses.add(verseText);
+          verseElement.style.textDecoration = "underline";
+        }
+
+        if (selectedVerses.size > 0) {
+          showPopup();
+        }
 
         chapterText.appendChild(verseElement);
       });
@@ -153,17 +171,30 @@ function copyVerseToClipboard(text) {
     });
 }
 
-function showToast(message) {
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.innerText = message;
+// function showToast(message) {
+//   const toast = document.createElement("div");
+//   toast.className = "toast";
+//   toast.innerText = message;
 
-  document.body.appendChild(toast);
+//   document.body.appendChild(toast);
 
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
+//   setTimeout(() => {
+//     toast.remove();
+//   }, 3000);
+// }
+
+// Show popup function
+function showPopup() {
+  const popup = document.getElementById("popup");
+  const selectedVersesDisplay = document.getElementById("selected-verses");
+  selectedVersesDisplay.innerHTML = Array.from(selectedVerses).join("<br>");
+  popup.style.display = "flex";
 }
+
+//  Close popup
+document.getElementById("popup-close").addEventListener("click", () => {
+  document.getElementById("popup").style.display = "none";
+});
 
 function changeChapter() {
   const prevButton = document.getElementById("prev-chapter");
@@ -178,3 +209,20 @@ function changeChapter() {
 //   const chapterText = document.getElementById("chapter");
 //   chapter.innerHTML = data.chapter.content.map((verse) => <div> ${verse} </div>);
 // }
+
+document.getElementById("copy-button").addEventListener("click", function () {
+  const versesToCopy = Array.from(selectedVerses).join(", ");
+  navigator.clipboard.writeText(versesToCopy).then(() => {
+    showToast("Verses copied to clipboard");
+  });
+});
+
+document.getElementById("share-button").addEventListener("click", function () {
+  // Implement share functionality here
+  showToast("Share functionality not implemented yet.");
+});
+
+document.getElementById("highlight-button").addEventListener("click", function () {
+  // Implement highlight functionality here
+  saveHighlightedVerses();
+});
