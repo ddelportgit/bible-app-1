@@ -104,13 +104,6 @@ function getChapter(version, book, chapter) {
       chapterTitle.innerHTML = `Chapter ${data.chapter.number}`;
       chapterText.innerHTML = "";
 
-      //   data.chapter.content.forEach((verse) => {
-      //     const verseElement = document.createElement("div");
-      //     verseElement.classList.add("verse");
-      //     verseElement.innerHTML = `<span> ${verse.number}:</span> ${verse.content.join(" ")}`;
-      //     chapterText.appendChild(verseElement);
-      //   });
-
       data.chapter.content.forEach((verse) => {
         const verseElement = document.createElement("div");
         verseElement.classList.add("verse");
@@ -126,24 +119,10 @@ function getChapter(version, book, chapter) {
 
         const verseText = `${bookTitle.innerHTML} ${chapterTitle.innerHTML} ${verse.number}`;
 
-        // verseElement.addEventListener("click", function () {
-        //   const verseText = `${verse.number}: ${filteredContent.join(" ")}`;
-        //   copyVerseToClipboard(verseText);
-        // });
-
-        // Toggle underline on click
-
-        if (selectedVerses.has(verseText)) {
-          selectedVerses.delete(verseText);
-          verseElement.style.textDecoration = "none";
-        } else {
-          selectedVerses.add(verseText);
-          verseElement.style.textDecoration = "underline";
-        }
-
-        if (selectedVerses.size > 0) {
-          showPopup();
-        }
+        verseElement.addEventListener("click", function () {
+          const verseText = `${verse.number}: ${filteredContent.join(" ")}`;
+          copyVerseToClipboard(verseText);
+        });
 
         chapterText.appendChild(verseElement);
       });
@@ -160,6 +139,8 @@ function handleInput() {
   getChapter(version.value, book.value, chapter.value);
 }
 
+// COPY FUNCTION
+
 function copyVerseToClipboard(text) {
   navigator.clipboard
     .writeText(text)
@@ -171,58 +152,16 @@ function copyVerseToClipboard(text) {
     });
 }
 
-// function showToast(message) {
-//   const toast = document.createElement("div");
-//   toast.className = "toast";
-//   toast.innerText = message;
+// TOAST
 
-//   document.body.appendChild(toast);
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerText = message;
 
-//   setTimeout(() => {
-//     toast.remove();
-//   }, 3000);
-// }
+  document.body.appendChild(toast);
 
-// Show popup function
-function showPopup() {
-  const popup = document.getElementById("popup");
-  const selectedVersesDisplay = document.getElementById("selected-verses");
-  selectedVersesDisplay.innerHTML = Array.from(selectedVerses).join("<br>");
-  popup.style.display = "flex";
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
 }
-
-//  Close popup
-document.getElementById("popup-close").addEventListener("click", () => {
-  document.getElementById("popup").style.display = "none";
-});
-
-function changeChapter() {
-  const prevButton = document.getElementById("prev-chapter");
-  const nextButton = document.getElementById("next-button");
-
-  prevButton.addEventListener("click", () => {
-    getChapter(_, _);
-  });
-}
-
-// function displayChapter(data) {
-//   const chapterText = document.getElementById("chapter");
-//   chapter.innerHTML = data.chapter.content.map((verse) => <div> ${verse} </div>);
-// }
-
-document.getElementById("copy-button").addEventListener("click", function () {
-  const versesToCopy = Array.from(selectedVerses).join(", ");
-  navigator.clipboard.writeText(versesToCopy).then(() => {
-    showToast("Verses copied to clipboard");
-  });
-});
-
-document.getElementById("share-button").addEventListener("click", function () {
-  // Implement share functionality here
-  showToast("Share functionality not implemented yet.");
-});
-
-document.getElementById("highlight-button").addEventListener("click", function () {
-  // Implement highlight functionality here
-  saveHighlightedVerses();
-});
