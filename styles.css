@@ -149,3 +149,84 @@ footer {
   float: right;
   font-size: 20px;
 }
+
+#inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+#inputs select,
+#inputs button {
+  flex: 1;
+  min-width: 150px;
+  max-width: 100%;
+  height: 2.5rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  padding: 0 10px;
+}
+
+#go-button {
+  background-color: #313131;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+#go-button:hover {
+  background-color: #555;
+}
+
+/* Media Queries */
+
+@media (max-width: 768px) {
+  #header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  #header-title {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+
+  #inputs {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #inputs select,
+  #inputs button {
+    width: 50%;
+    font-size: 1rem;
+  }
+
+  #book-chapter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  #chapter .verse {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #header-title {
+    font-size: 1.6rem;
+  }
+
+  #chapter-title {
+    font-size: 1.2rem;
+  }
+
+  #chapter .verse {
+    font-size: 1rem;
+  }
+}
