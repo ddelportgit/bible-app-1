@@ -1,8 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Source+Serif+4:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
     <title>The Holy Bible Project</title>
@@ -18,7 +22,11 @@
             <option value="eng_lsv">Literal Standard Version</option>
             <option value="ENGWEBP">World English Bible</option>
           </select>
-          <select name="select-book" id="select-book" onchange="updateSelectChapter()">
+          <select
+            name="select-book"
+            id="select-book"
+            onchange="updateSelectChapter()"
+          >
             <option value="Select book">Select book</option>
             <option value="Genesis">Genesis</option>
             <option value="Exodus">Exodus</option>
@@ -92,13 +100,20 @@
             <option value="1">1</option>
           </select>
           <button id="go-button">Go</button>
+          <div id="theme-toggle">
+            <span>Light</span>
+            <button id="toggle-btn" aria-label="Toggle dark mode"></button>
+            <span>Dark</span>
+          </div>
         </div>
       </header>
 
       <section id="chapter-container">
         <div id="book-chapter-container">
           <h1 id="book-title"></h1>
-          <h2 id="chapter-title">Select a version, book, and chapter to start reading.</h2>
+          <h2 id="chapter-title">
+            Select a version, book, and chapter to start reading.
+          </h2>
         </div>
         <!-- <div id="chapter-buttons">
           <button id="prev-chapter">⊲</button>
@@ -121,8 +136,8 @@
       <!-- end of container -->
     </div>
 
-    <footer>
-      <p>&copy; 2025 The Holy Bible Website. All rights reserved.</p>
+    <footer id="footer">
+      <p>© 2026 The Holy Bible Project</p>
     </footer>
   </body>
 </html>

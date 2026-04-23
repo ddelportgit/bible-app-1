@@ -77,8 +77,6 @@ function updateSelectChapter() {
   const selectChapter = document.getElementById("select-chapter");
   const selectedBook = selectBook.value;
 
-  // clear previoius chapter options
-
   selectChapter.innerHTML = "<option value=''>Select Chapter</option>";
 
   if (selectedBook) {
@@ -92,14 +90,12 @@ function updateSelectChapter() {
   }
 }
 
-const selectedVerses = new Set(); // To track selected verses
+const selectedVerses = new Set();
 
 function getChapter(version, book, chapter) {
   fetch(`https://bible.helloao.org/api/${version}/${book}/${chapter}.json`)
     .then((res) => res.json())
     .then((data) => {
-      // console.log(data);
-
       bookTitle.innerHTML = data.book.name;
       chapterTitle.innerHTML = `Chapter ${data.chapter.number}`;
       chapterText.innerHTML = "";
@@ -108,18 +104,22 @@ function getChapter(version, book, chapter) {
         const verseElement = document.createElement("div");
         verseElement.classList.add("verse");
 
-        // Filter out any content that has a noteId
         const filteredContent = verse.content
           .filter((item) => typeof item === "string")
-          .map((item) => item.replace(/¶/g, "")); // Remove the ¶ symbol
+          .map((item) => item.replace(/¶/g, ""));
 
         verseElement.innerHTML = `<span>${verse.number}</span> <div>${filteredContent.join(
-          " "
+          " ",
         )}</div>`;
 
         const verseText = `${bookTitle.innerHTML} ${chapterTitle.innerHTML} ${verse.number}`;
 
         verseElement.addEventListener("click", function () {
+          document
+            .querySelectorAll(".verse")
+            .forEach((v) => v.classList.remove("active"));
+          verseElement.classList.add("active");
+
           const verseText = `${verse.number}: ${filteredContent.join(" ")}`;
           copyVerseToClipboard(verseText);
         });
@@ -165,3 +165,28 @@ function showToast(message) {
     toast.remove();
   }, 3000);
 }
+
+// DARK MODE
+
+const toggleBtn = document.getElementById("toggle-btn");
+
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark");
+}
+
+if (!localStorage.getItem("theme")) {
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  if (prefersDark) {
+    document.body.classList.add("dark");
+  }
+}
+
+toggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  if (document.body.classList.contains("dark")) {
+    localStorage.setItem("theme", "dark");
+  } else {
+    localStorage.setItem("theme", "light");
+  }
+});
