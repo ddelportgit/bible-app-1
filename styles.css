@@ -27,20 +27,17 @@ body.dark {
   --border: #2a2f38;
 }
 
-/* ===== DARK MODE FORM FIXES ===== */
 body.dark select {
   color: var(--text);
   background: var(--card);
   border-color: var(--border);
 }
 
-/* Fix dropdown options (important for readability) */
 body.dark select option {
   background: var(--card);
   color: var(--text);
 }
 
-/* Hover state */
 body.dark select:hover {
   border-color: var(--text);
 }
@@ -56,20 +53,17 @@ body.dark select:hover {
   opacity: 0.85;
 }
 
-/* Dark mode adjustment */
 body.dark #go-button {
   background: #f1f1f1;
   color: #111;
 }
 
-/* ===== LAYOUT ===== */
 #main-container {
   max-width: 900px;
   margin: 60px auto;
   padding: 40px;
 }
 
-/* ===== HEADER ===== */
 #header {
   display: flex;
   flex-direction: column;
@@ -84,7 +78,6 @@ body.dark #go-button {
   letter-spacing: -0.5px;
 }
 
-/* ===== CONTROLS ===== */
 #inputs {
   display: flex;
   gap: 10px;
@@ -128,7 +121,6 @@ button,
     border 0.3s ease;
 }
 
-/* ===== BOOK HEADER ===== */
 #book-chapter-container {
   margin-bottom: 25px;
 }
@@ -144,7 +136,6 @@ button,
   font-size: 1rem;
 }
 
-/* ===== VERSES ===== */
 #chapter {
   display: flex;
   flex-direction: column;
@@ -203,7 +194,6 @@ body.dark .verse:hover {
   color: #bbb;
 }
 
-/* ===== TOAST ===== */
 .toast {
   position: fixed;
   bottom: 20px;
@@ -262,7 +252,6 @@ body.dark .verse:hover {
   transition: transform 0.3s ease;
 }
 
-/* when dark */
 body.dark #toggle-btn::after {
   transform: translateX(20px);
   background: #111;
@@ -275,7 +264,6 @@ body.dark #toggle-btn::after {
   }
 }
 
-/* ===== MOBILE ===== */
 @media (max-width: 600px) {
   #main-container {
     padding: 20px;
