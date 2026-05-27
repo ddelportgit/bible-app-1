@@ -11,6 +11,7 @@ async function initFromApi() {
     const res = await fetch("https://bible.helloao.org/api/translations.json");
     const data = await res.json();
     populateVersionSelect(data.translations || data);
+    restoreLastRead();
   } catch (err) {
     console.error("Failed to load translations", err);
   }
@@ -92,6 +93,46 @@ selectBook.addEventListener("change", function (e) {
   populateChapterSelectFromBookOption(selectedOption);
 });
 
+function saveLastRead(version, book, chapter) {
+  try {
+    localStorage.setItem("lastRead", JSON.stringify({ version, book, chapter }));
+  } catch (e) {
+    console.error("Could not save last read", e);
+  }
+}
+
+function restoreLastRead() {
+  const raw = localStorage.getItem("lastRead");
+  if (!raw) return;
+  try {
+    const { version, book, chapter } = JSON.parse(raw);
+    if (!version) return;
+
+    const vSel = document.getElementById("select-version");
+    vSel.value = version;
+
+    vSel.dispatchEvent(new Event("change"));
+
+    const waiter = setInterval(() => {
+      const bSel = document.getElementById("select-book");
+      if (bSel && bSel.options.length > 1) {
+        if (book) {
+          bSel.value = book;
+          bSel.dispatchEvent(new Event("change"));
+        }
+
+        setTimeout(() => {
+          const cSel = document.getElementById("select-chapter");
+          if (cSel && chapter) cSel.value = chapter;
+        }, 150);
+        clearInterval(waiter);
+      }
+    }, 150);
+  } catch (e) {
+    console.error("Failed to restore last read", e);
+  }
+}
+
 function getChapter(version, book, chapter) {
   fetch(`https://bible.helloao.org/api/${version}/${book}/${chapter}.json`)
     .then((res) => res.json())
@@ -123,6 +164,8 @@ function getChapter(version, book, chapter) {
         });
 
         chapterText.appendChild(verseElement);
+
+        saveLastRead(version, book, chapter);
       });
     });
 }
